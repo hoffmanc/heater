@@ -1,0 +1,16 @@
+[Unit]
+Description=Thermostat
+After=network.target
+
+[Service]
+Environment=GOOGLE_APPLICATION_CREDENTIALS=heater-267000-9cb40ab1e5e8.json
+User=pi
+ExecStart=/home/pi/heater/thermostat.py
+WorkingDirectory=/home/pi
+Restart=always
+RestartSec=10
+StartLimitInterval=20
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target
