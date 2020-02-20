@@ -3,7 +3,7 @@ Description=Thermostat
 After=network.target
 
 [Service]
-Environment=GOOGLE_APPLICATION_CREDENTIALS=heater-267000-9cb40ab1e5e8.json
+Environment=GOOGLE_APPLICATION_CREDENTIALS=heater-267000-abc2693a6104.json
 User=pi
 ExecStart=/home/pi/heater/thermostat.py
 WorkingDirectory=/home/pi

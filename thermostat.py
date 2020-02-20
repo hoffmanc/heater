@@ -24,7 +24,7 @@ def log(temp, humidity):
     global db, status
     print("Temp: {:.1f} F | Humidity: {}% ".format(temp, humidity))
     now = datetime.now()
-    doc_ref = db.collection(u'readings').document(now)
+    doc_ref = db.collection(u'temps').document(now.strftime(u'%Y-%m-%d %H:%M:%S%z'))
     doc_ref.set({
         u'datetime': now,
         u'temp': temp,
