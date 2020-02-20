@@ -9,26 +9,27 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import datetime
  
-prevOn = None
+status = None
 def offon(on):
-    global prevOn
-    if prevOn is None or prevOn != on:
+    global status
+    if status is None or status != on:
         client = mqtt.Client()
         client.connect("localhost",1883,60)
         print("sending %d via MQTT" % (on))
         client.publish("test/message/cmnd/heater/power", on );
         client.disconnect()
-        prevOn = on
+        status = on
 
 def log(temp, humidity):
-    global db
+    global db, status
     print("Temp: {:.1f} F | Humidity: {}% ".format(temp, humidity))
     now = datetime.now()
-    doc_ref = db.collection(u'temps').document(now.strftime(u'%Y-%m-%d %H:%M:%S'))
+    doc_ref = db.collection(u'readings').document(now)
     doc_ref.set({
         u'datetime': now,
         u'temp': temp,
         u'humidity': humidity,
+        u'status': status
     })
 
 def onConfigChange(doclist, changes, read_time):
