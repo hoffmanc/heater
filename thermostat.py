@@ -62,10 +62,10 @@ while True:
         humidity = dhtDevice.humidity
         log(temperature_f, humidity)
         last5Temps = last5Temps[-4:] + [temperature_f]
-        avgOfLast5 = sum(last5Temps) / len(last5Temps)
-        if avgOfLast5 < minTemp:
+        maxOfLast5 = max(last5Temps)
+        if maxOfLast5 < minTemp:
             offon(1)
-        elif avgOfLast5 > maxTemp:
+        elif maxOfLast5 > maxTemp:
             offon(0)
             
  
