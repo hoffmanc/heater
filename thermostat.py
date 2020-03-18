@@ -4,9 +4,7 @@ import time
 import board
 import adafruit_dht
 import paho.mqtt.client as mqtt
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from tinydb import TinyDB
 from datetime import datetime
  
 status = None
@@ -24,8 +22,7 @@ def log(temp, humidity):
     global db, status
     print("Temp: {:.1f} F | Humidity: {}% ".format(temp, humidity))
     now = datetime.now()
-    doc_ref = db.collection(u'temps').document(now.strftime(u'%Y-%m-%d %H:%M:%S%z'))
-    doc_ref.set({
+    doc_ref.insert({
         u'datetime': now,
         u'temp': temp,
         u'humidity': humidity,
@@ -39,20 +36,14 @@ def onConfigChange(doclist, changes, read_time):
     print(u'temp set to {}'.format(maxTemp))
     minTemp = maxTemp - 2
 
-# Use the application default credentials
-cred = credentials.ApplicationDefault()
-firebase_admin.initialize_app(cred, {
-    'projectId': 'heater-267000',
-})
-db = firestore.client()
-doc_ref = db.collection(u'config').document(u'maxTemp')
-doc_ref.on_snapshot(onConfigChange)
+db = TinyDB(datetime.now().strftime(u'temps-%Y-%m-%d.json'))
 
-dhtDevice = adafruit_dht.DHT22(board.D4)
 last5Temps = []
-maxTemp = doc_ref.get().get('temp')
+maxTemp = int(open("config/temp.conf", "r").read())
 print(u'initial temp {}'.format(maxTemp))
 minTemp = maxTemp - 2
+
+dhtDevice = adafruit_dht.DHT22(board.D4)
 
 while True:
     try:
