@@ -1,0 +1,16 @@
+[Unit]
+Description=Thermostat Config
+After=network.target
+
+[Service]
+Environment=AUTH_CREDS=creds.json
+User=pi
+ExecStart=/home/pi/heater/config/config
+WorkingDirectory=/home/pi/heater/config
+Restart=always
+RestartSec=10
+StartLimitInterval=20
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target
