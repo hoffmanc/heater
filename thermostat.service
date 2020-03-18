@@ -6,7 +6,7 @@ After=network.target
 Environment=GOOGLE_APPLICATION_CREDENTIALS=heater-267000-abc2693a6104.json
 User=pi
 ExecStart=/home/pi/heater/thermostat.py
-WorkingDirectory=/home/pi
+WorkingDirectory=/home/pi/heater/
 Restart=always
 RestartSec=10
 StartLimitInterval=20
