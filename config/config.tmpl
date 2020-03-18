@@ -1,0 +1,14 @@
+{{ define "config.tmpl" }}
+<html>
+  <body>
+    <h5>{{ .err }}</h5>
+    <h1>{{ .temp }}</h1>
+    <form action="/config" method="POST">
+      <label>Set Temp:
+        <input type="text" name="newTemp" value="{{.temp}}" />
+      </label>
+      <input type="submit"/>
+    </form>
+  </body>
+</html>
+{{ end }}
