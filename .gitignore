@@ -1,3 +1,4 @@
 config/temp.conf
 config/creds.json
+config/config
 temps-*.json
