@@ -5,7 +5,6 @@ import time
 import board
 import adafruit_dht
 import paho.mqtt.client as mqtt
-from tinydb import TinyDB
 from datetime import datetime
 
 status = None
@@ -23,12 +22,16 @@ def log(temp, humidity):
     global db, status
     print("Temp: {:.1f} F | Humidity: {}% ".format(temp, humidity))
     now = datetime.now()
-    db.insert({
-        u'datetime': now.strftime(u'%Y-%m-%d %H:%M:%S%z'),
-        u'temp': temp,
-        u'humidity': humidity,
-        u'status': status
-    })
+    l = "\t".join((
+        now.strftime(u'%Y-%m-%d %H:%M:%S%z'),
+        "{:.1f}".format(temp),
+        str(humidity),
+        str(status)
+    ))
+
+    fo = open("log/log-" + now.strftime(u'%Y-%m-%d') + ".log", "a")
+    fo.write(l + "\n")
+    fo.close()
 
 def getTempConf():
     global tempConf
@@ -36,10 +39,8 @@ def getTempConf():
     print(u'temp set at {}'.format(t))
     return t
 
-db = TinyDB(datetime.now().strftime(u'temps-%Y-%m-%d.json'))
-
 last5Temps = []
-
+os.makedirs("log", exist_ok=True)
 dhtDevice = adafruit_dht.DHT22(board.D4)
 
 while True:
