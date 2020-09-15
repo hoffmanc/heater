@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
-	"log"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,10 +24,34 @@ func check(c *gin.Context, e error) {
 	}
 }
 
+func log() ([]byte, error) {
+	fname := fmt.Sprintf("../log/%s.log", time.Now().Format("2006-01-02"))
+	log.Println(fname)
+	fh, err := os.Open(fname)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	reader := bufio.NewReader(fh)
+	var l []byte
+	for {
+		line, _, err := reader.ReadLine()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return []byte{}, err
+		}
+		l = line
+	}
+	return l, nil
+}
+
 func readTemp(c *gin.Context) {
-	dat, err := ioutil.ReadFile("temp.conf")
+	log, err := log()
 	check(c, err)
-	c.HTML(200, "config.tmpl", gin.H{"temp": string(dat)})
+	tempConf, err := ioutil.ReadFile("temp.conf")
+	check(c, err)
+	c.HTML(200, "config.tmpl", gin.H{"temp": string(tempConf), "log": string(log)})
 }
 
 func getCreds(creds *AuthCreds) error {
