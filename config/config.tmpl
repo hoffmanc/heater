@@ -2,10 +2,14 @@
 <html>
   <body>
     <h5>{{ .err }}</h5>
-    <h1>{{ .temp }}</h1>
+    <h1>Temp: {{ .temp }}</h1>
+    <h2>Threshold: {{ .threshold }}</h2>
     <form action="/config" method="POST">
       <label>Set Temp:
         <input type="text" name="newTemp" value="{{.temp}}" />
+      </label>
+      <label>Set Threshold:
+        <input type="text" name="newThreshold" value="{{.threshold}}" />
       </label>
       <input type="submit"/>
     </form>

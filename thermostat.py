@@ -39,6 +39,12 @@ def getTempConf():
     print(u'temp set at {}'.format(t))
     return t
 
+def getThresholdConf():
+    global thresholdConf
+    t = int(open("config/threshold.conf", "r").read())
+    print(u'threshold set at {}'.format(t))
+    return t
+
 last5Temps = []
 os.makedirs("log", exist_ok=True)
 dhtDevice = adafruit_dht.DHT22(board.D4)
@@ -46,7 +52,9 @@ dhtDevice = adafruit_dht.DHT22(board.D4)
 while True:
     try:
         maxTemp = getTempConf()
-        minTemp = maxTemp - 2
+        threshold = getThresholdConf()
+        minTemp = maxTemp - threshold
+        maxTemp += threshold
         temperature_c = dhtDevice.temperature
         temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
