@@ -47,7 +47,7 @@ def getThresholdConf():
 
 last5Temps = []
 os.makedirs("log", exist_ok=True)
-dhtDevice = adafruit_dht.DHT22(board.D4)
+dhtDevice = adafruit_dht.DHT22(board.D17)
 
 while True:
     try:
